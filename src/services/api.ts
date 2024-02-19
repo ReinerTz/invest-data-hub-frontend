@@ -6,7 +6,8 @@ const API_URL = "http://localhost:3000/stocks"; // Ajuste o endpoint conforme ne
 
 export const fetchLatestStocks = async (): Promise<Stock[]> => {
   try {
-    const response = await fetch(`${API_URL}`);
+    console.log(import.meta.env);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}`);
     if (!response.ok) {
       throw new Error("Erro ao buscar ações");
     }
