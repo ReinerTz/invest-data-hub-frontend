@@ -3,23 +3,12 @@ import React, { useEffect, useState } from "react";
 import { fetchLatestStocks } from "../services/api";
 import { Stock } from "../types/Stock";
 import StockTable from "./StockTable";
-import { FilterInput } from "./FilterInput";
-import { TickerFilter } from "./TickerFilter";
 import { MultiValue } from "react-select";
+import { StockTableOptions } from "./StockTableOptions";
 
 const StockList: React.FC = () => {
   const [stocks, setStocks] = useState<Stock[]>([]);
-
-  useEffect(() => {
-    const getStocks = async () => {
-      const data = await fetchLatestStocks();
-      console.log(data);
-      setStocks(data);
-    };
-
-    getStocks();
-  }, []);
-
+  const [showFilter, setShowFilter] = useState<boolean>(false);
   const [filters, setFilters] = useState<{
     tickers?: string[];
     pl?: { min?: number; max?: number };
@@ -43,6 +32,16 @@ const StockList: React.FC = () => {
     growthRateFiveYears?: { min?: number; max?: number };
   }>({});
 
+  useEffect(() => {
+    const getStocks = async () => {
+      const data = await fetchLatestStocks();
+
+      setStocks(data);
+    };
+
+    getStocks();
+  }, []);
+
   const handleFilterChange = (
     field: string,
     range: { min?: number; max?: number }
@@ -64,95 +63,21 @@ const StockList: React.FC = () => {
     const selectedTickers = selectedOptions.map((option) => option.value);
     setFilters((prev) => ({ ...prev, tickers: selectedTickers }));
   };
+  const handleShowFilter = () => {
+    setShowFilter(!showFilter);
+  };
 
   return (
-    <div className="p-4">
-      <div className="p-3">
-        <TickerFilter options={tickerOptions} onChange={handleTickerChange} />
-      </div>
-
-      <div className="flex flex-wrap gap-4 mb-4">
-        <FilterInput
-          label="P/L"
-          onChange={(value) => handleFilterChange("pl", value)}
-        />
-        <FilterInput
-          label="P/VP"
-          onChange={(value) => handleFilterChange("pvp", value)}
-        />
-        <FilterInput
-          label="PSR"
-          onChange={(value) => handleFilterChange("psr", value)}
-        />
-        <FilterInput
-          label="Dividend Yield"
-          onChange={(value) => handleFilterChange("dividendYield", value)}
-        />
-        <FilterInput
-          label="P/Ativo"
-          onChange={(value) => handleFilterChange("priceToAsset", value)}
-        />
-        <FilterInput
-          label="P/Cap. Giro"
-          onChange={(value) =>
-            handleFilterChange("priceToWorkingCapital", value)
-          }
-        />
-        <FilterInput
-          label="P/EBIT"
-          onChange={(value) => handleFilterChange("priceToEbit", value)}
-        />
-        <FilterInput
-          label="P/Ativo Circ."
-          onChange={(value) => handleFilterChange("priceToCurrentAsset", value)}
-        />
-        <FilterInput
-          label="EV/EBIT"
-          onChange={(value) => handleFilterChange("evToEbit", value)}
-        />
-        <FilterInput
-          label="EV/EBITDA"
-          onChange={(value) => handleFilterChange("evToEbitda", value)}
-        />
-        <FilterInput
-          label="Margem EBIT"
-          onChange={(value) => handleFilterChange("ebitMargin", value)}
-        />
-        <FilterInput
-          label="Margem Líquida"
-          onChange={(value) => handleFilterChange("netMargin", value)}
-        />
-        <FilterInput
-          label="Liq. Corrente"
-          onChange={(value) => handleFilterChange("currentLiquidity", value)}
-        />
-        <FilterInput
-          label="ROIC"
-          onChange={(value) => handleFilterChange("roic", value)}
-        />
-        <FilterInput
-          label="ROE"
-          onChange={(value) => handleFilterChange("roe", value)}
-        />
-        <FilterInput
-          label="Liquidez 2 Meses"
-          onChange={(value) => handleFilterChange("liquidityTwoMonths", value)}
-        />
-        <FilterInput
-          label="Patrimônio Líq."
-          onChange={(value) => handleFilterChange("netWorth", value)}
-        />
-        <FilterInput
-          label="Dív./Patrimônio"
-          onChange={(value) => handleFilterChange("debtToEquity", value)}
-        />
-        <FilterInput
-          label="Cresc. 5 Anos"
-          onChange={(value) => handleFilterChange("growthRateFiveYears", value)}
-        />
-      </div>
+    <div className="p-1">
+      <StockTableOptions
+        options={tickerOptions}
+        onTicketFilterChange={handleTickerChange}
+        onShowFilter={handleShowFilter}
+      />
 
       <StockTable
+        onFilterChange={handleFilterChange}
+        showFilter={showFilter}
         stocks={stocks.filter((stock) => {
           // Verifica se a lista de tickers está definida e se o ticker atual está incluído na lista
           if (
@@ -169,8 +94,12 @@ const StockList: React.FC = () => {
 
             const value = stock[key as keyof Omit<Stock, "ticker" | "id">];
             if (typeof filter === "object" && filter !== null) {
-              const { min, max } = filter as { min: number; max: number };
-              return (!min || value >= min) && (!max || value <= max);
+              const { min, max } = filter as { min?: number; max?: number };
+              // Verifica explicitamente se min e max são diferentes de undefined
+              return (
+                (min !== undefined ? value >= min : true) &&
+                (max !== undefined ? value <= max : true)
+              );
             }
             return true;
           });

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 interface FilterInputProps {
-  label: string;
+  label?: string;
   onChange: (value: { min?: number; max?: number }) => void;
 }
 
@@ -16,6 +16,7 @@ export const FilterInput: React.FC<FilterInputProps> = ({
   // Atualiza os estados interno e notifica o componente pai
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const min = e.target.value ? Number(e.target.value) : undefined;
+
     setMinValue(min);
     onChange({ min, max: maxValue });
   };
@@ -27,21 +28,21 @@ export const FilterInput: React.FC<FilterInputProps> = ({
   };
 
   return (
-    <div className="flex flex-col border p-2 rounded">
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
+    <div className="flex flex-col border p-2 rounded text-black">
+      <label className="block text-lg font-medium text-gray-700">{label}</label>
       <input
         type="number"
         placeholder="Min"
         value={minValue ?? ""}
         onChange={handleMinChange}
-        className="mt-1 block w-28 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        className="mt-1 block w-20 text-colo  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
       />
       <input
         type="number"
         placeholder="Max"
         value={maxValue ?? ""}
         onChange={handleMaxChange}
-        className="mt-1 block w-28 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        className="mt-1 block w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
       />
     </div>
   );

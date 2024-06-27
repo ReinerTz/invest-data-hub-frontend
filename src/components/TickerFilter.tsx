@@ -18,14 +18,16 @@ export const TickerFilter: React.FC<TickerFilterProps> = ({
   onChange,
 }) => {
   return (
-    <CreatableSelect
-      isMulti
-      name="tickers"
-      options={options}
-      className="basic-multi-select"
-      classNamePrefix="select"
-      placeholder="Selecione tickers..."
-      onChange={onChange}
-    />
+    <div className="w-56 w-min-56 ">
+      <CreatableSelect
+        isMulti
+        name="tickers"
+        options={options}
+        className="basic-multi-select"
+        classNamePrefix="select"
+        placeholder="Selecione tickers..."
+        onChange={onChange}
+      />
+    </div>
   );
 };

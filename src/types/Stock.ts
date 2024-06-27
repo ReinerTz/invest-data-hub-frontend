@@ -1,4 +1,4 @@
-export interface Stock {
+export type Stock = {
   id: string;
   ticker: string;
   quote: number;
@@ -21,4 +21,4 @@ export interface Stock {
   netWorth: number;
   debtToEquity: number;
   growthRateFiveYears: number;
-}
+};
