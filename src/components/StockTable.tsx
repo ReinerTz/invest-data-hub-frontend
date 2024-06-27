@@ -83,6 +83,7 @@ const StockTable: React.FC<StockTableProps> = ({
   );
 
   // Função para alternar a visibilidade da coluna
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const toggleColumnVisibility = (key: string) => {
     setVisibleColumns((prev) => ({ ...prev, [key]: !prev[key] }));
   };

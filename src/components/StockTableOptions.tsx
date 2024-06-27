@@ -1,7 +1,6 @@
-import { FaAnchor, FaFilter, FaSistrix } from "react-icons/fa6";
+import { FaAnchor, FaFilter } from "react-icons/fa6";
 import { TickerFilter } from "./TickerFilter";
-import { useState } from "react";
-import { Stock } from "../types/Stock";
+
 import { ActionMeta, MultiValue } from "react-select";
 
 interface Option {

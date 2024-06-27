@@ -1,4 +1,4 @@
-import MantineTable from "./components/MantineTable";
+// import MantineTable from "./components/MantineTable";
 import StockList from "./components/StockList";
 // Importe outros componentes conforme necessário
 
