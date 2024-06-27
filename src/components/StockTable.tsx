@@ -152,7 +152,7 @@ const StockTable: React.FC<StockTableProps> = ({
 
   return (
     <div>
-      {/* <div className="flex flex-wrap mb-4 ">
+      <div className="flex flex-wrap mb-4 ">
         {columns.map((column) => (
           <label
             key={column.key}
@@ -167,7 +167,7 @@ const StockTable: React.FC<StockTableProps> = ({
             <span className="ml-2 text-gray-700">{column.header}</span>
           </label>
         ))}
-      </div> */}
+      </div>
 
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 border border-[#414141]">
