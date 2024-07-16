@@ -15,12 +15,14 @@ interface TickerFilterProps {
     actionMeta: ActionMeta<Option>
   ) => void;
   onShowFilter: () => void;
+  onShowColumns: () => void;
 }
 
 export const StockTableOptions: React.FC<TickerFilterProps> = ({
   options,
   onTicketFilterChange,
   onShowFilter,
+  onShowColumns,
 }) => {
   return (
     <div className="flex justify-end bg-slate-800 sm:rounded-lg">
@@ -33,7 +35,7 @@ export const StockTableOptions: React.FC<TickerFilterProps> = ({
         </button>
       </div>
       <div className="p-3">
-        <button title="Exibir/Esconder Colunas">
+        <button title="Exibir/Esconder Colunas" onClick={onShowColumns}>
           <FaAnchor color="white" size={40} />
         </button>
       </div>

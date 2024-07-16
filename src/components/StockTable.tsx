@@ -1,4 +1,3 @@
-// src/components/StockTable.tsx
 import React, { useState } from "react";
 import { Stock } from "../types/Stock";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa6";
@@ -21,6 +20,7 @@ interface StockTableProps {
     range: { min?: number; max?: number }
   ) => void;
   showFilter: boolean;
+  showMenu: boolean;
 }
 
 const columns: Column[] = [
@@ -74,6 +74,7 @@ const StockTable: React.FC<StockTableProps> = ({
   stocks,
   onFilterChange,
   showFilter,
+  showMenu,
 }) => {
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(
     columns.reduce((acc, column) => {
@@ -82,8 +83,6 @@ const StockTable: React.FC<StockTableProps> = ({
     }, {} as Record<string, boolean>)
   );
 
-  // Função para alternar a visibilidade da coluna
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const toggleColumnVisibility = (key: string) => {
     setVisibleColumns((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -151,23 +150,22 @@ const StockTable: React.FC<StockTableProps> = ({
   }, [stocks, sortConfig]);
 
   return (
-    <div>
-      <div className="flex flex-wrap mb-4 ">
-        {columns.map((column) => (
-          <label
-            key={column.key}
-            className="inline-flex items-center mr-2 mb-2"
-          >
-            <input
-              type="checkbox"
-              className="form-checkbox h-5 w-5 text-blue-600"
-              checked={visibleColumns[column.key]}
-              onChange={() => toggleColumnVisibility(column.key)}
-            />
-            <span className="ml-2 text-gray-700">{column.header}</span>
-          </label>
-        ))}
-      </div>
+    <div className="relative">
+      {showMenu && (
+        <div className="checkbox-menu absolute  right-4 bg-white p-4 shadow-md z-50">
+          {columns.map((column) => (
+            <label key={column.key} className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                className="form-checkbox h-5 w-5 text-blue-600"
+                checked={visibleColumns[column.key]}
+                onChange={() => toggleColumnVisibility(column.key)}
+              />
+              <span className="ml-2 text-gray-700">{column.header}</span>
+            </label>
+          ))}
+        </div>
+      )}
 
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 border border-[#414141]">
@@ -184,7 +182,7 @@ const StockTable: React.FC<StockTableProps> = ({
                     scope="col"
                     className="px-6 text-white font-semibold border"
                   >
-                    <div className="flex items-center ">
+                    <div className="flex items-center">
                       {column.header}
                       <button
                         onClick={() => requestSort(column.key)}

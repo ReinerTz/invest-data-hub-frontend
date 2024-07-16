@@ -31,6 +31,7 @@ const StockList: React.FC = () => {
     debtToEquity?: { min?: number; max?: number };
     growthRateFiveYears?: { min?: number; max?: number };
   }>({});
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     const getStocks = async () => {
@@ -67,17 +68,23 @@ const StockList: React.FC = () => {
     setShowFilter(!showFilter);
   };
 
+  const handleShowMenu = () => {
+    setShowMenu(!showMenu);
+  };
+
   return (
     <div className="p-1">
       <StockTableOptions
         options={tickerOptions}
         onTicketFilterChange={handleTickerChange}
         onShowFilter={handleShowFilter}
+        onShowColumns={handleShowMenu}
       />
 
       <StockTable
         onFilterChange={handleFilterChange}
         showFilter={showFilter}
+        showMenu={showMenu}
         stocks={stocks.filter((stock) => {
           // Verifica se a lista de tickers está definida e se o ticker atual está incluído na lista
           if (

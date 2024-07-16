@@ -18,7 +18,7 @@ export const TickerFilter: React.FC<TickerFilterProps> = ({
   onChange,
 }) => {
   return (
-    <div className="w-56 w-min-56 ">
+    <div className="w-96 w-min-56 ">
       <CreatableSelect
         isMulti
         name="tickers"
