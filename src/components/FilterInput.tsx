@@ -1,19 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface FilterInputProps {
   label?: string;
   onChange: (value: { min?: number; max?: number }) => void;
+  initialValues?: { min?: number; max?: number };
 }
 
 export const FilterInput: React.FC<FilterInputProps> = ({
   label,
   onChange,
+  initialValues = {},
 }) => {
-  // Estado interno para manter os valores mínimo e máximo
-  const [minValue, setMinValue] = useState<number | undefined>(undefined);
-  const [maxValue, setMaxValue] = useState<number | undefined>(undefined);
+  const [minValue, setMinValue] = useState<number | undefined>(
+    initialValues.min
+  );
+  const [maxValue, setMaxValue] = useState<number | undefined>(
+    initialValues.max
+  );
 
-  // Atualiza os estados interno e notifica o componente pai
+  useEffect(() => {
+    setMinValue(initialValues.min);
+    setMaxValue(initialValues.max);
+  }, [initialValues]);
+
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const min = e.target.value ? Number(e.target.value) : undefined;
 

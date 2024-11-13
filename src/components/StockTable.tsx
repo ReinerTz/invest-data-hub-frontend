@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stock } from "../types/Stock";
+import { Stock, StockFilters } from "../types/Stock";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa6";
 import FilterInput from "./FilterInput";
 
@@ -8,7 +8,7 @@ enum EColumnType {
   PERCENTAGE = "percentage",
 }
 interface Column {
-  key: keyof Stock;
+  key: keyof Omit<Stock, "id">;
   header: string;
   type?: EColumnType;
 }
@@ -21,6 +21,7 @@ interface StockTableProps {
   ) => void;
   showFilter: boolean;
   showMenu: boolean;
+  filters: StockFilters;
 }
 
 const columns: Column[] = [
@@ -75,6 +76,7 @@ const StockTable: React.FC<StockTableProps> = ({
   onFilterChange,
   showFilter,
   showMenu,
+  filters,
 }) => {
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(
     columns.reduce((acc, column) => {
@@ -208,6 +210,7 @@ const StockTable: React.FC<StockTableProps> = ({
                           onChange={(value) =>
                             onFilterChange(column.key, value)
                           }
+                          initialValues={filters[column.key]}
                         />
                       </div>
                     )}

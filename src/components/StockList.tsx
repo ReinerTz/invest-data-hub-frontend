@@ -1,36 +1,16 @@
 // src/components/StockList.tsx
 import React, { useEffect, useState } from "react";
 import { fetchLatestStocks } from "../services/api";
-import { Stock } from "../types/Stock";
+import { Stock, StockFilters } from "../types/Stock";
 import StockTable from "./StockTable";
 import { MultiValue } from "react-select";
 import { StockTableOptions } from "./StockTableOptions";
+import { recommendedPortfolios } from "../util/utils";
 
 const StockList: React.FC = () => {
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [showFilter, setShowFilter] = useState<boolean>(false);
-  const [filters, setFilters] = useState<{
-    tickers?: string[];
-    pl?: { min?: number; max?: number };
-    pvp?: { min?: number; max?: number };
-    psr?: { min?: number; max?: number };
-    dividendYield?: { min?: number; max?: number };
-    priceToAsset?: { min?: number; max?: number };
-    priceToWorkingCapital?: { min?: number; max?: number };
-    priceToEbit?: { min?: number; max?: number };
-    priceToCurrentAsset?: { min?: number; max?: number };
-    evToEbit?: { min?: number; max?: number };
-    evToEbitda?: { min?: number; max?: number };
-    ebitMargin?: { min?: number; max?: number };
-    netMargin?: { min?: number; max?: number };
-    currentLiquidity?: { min?: number; max?: number };
-    roic?: { min?: number; max?: number };
-    roe?: { min?: number; max?: number };
-    liquidityTwoMonths?: { min?: number; max?: number };
-    netWorth?: { min?: number; max?: number };
-    debtToEquity?: { min?: number; max?: number };
-    growthRateFiveYears?: { min?: number; max?: number };
-  }>({});
+  const [filters, setFilters] = useState<StockFilters>({});
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
@@ -48,6 +28,16 @@ const StockList: React.FC = () => {
     range: { min?: number; max?: number }
   ) => {
     setFilters((prev) => ({ ...prev, [field]: range }));
+  };
+
+  const applyPortfolioFilters = (portfolioName: string) => {
+    const selectedPortfolio = recommendedPortfolios.find(
+      (portfolio) => portfolio.name === portfolioName
+    );
+
+    if (selectedPortfolio) {
+      setFilters(selectedPortfolio.filters); // Define os filtros da carteira recomendada
+    }
   };
 
   interface Option {
@@ -79,6 +69,7 @@ const StockList: React.FC = () => {
         onTicketFilterChange={handleTickerChange}
         onShowFilter={handleShowFilter}
         onShowColumns={handleShowMenu}
+        onSelectPortfolio={applyPortfolioFilters}
       />
 
       <StockTable
@@ -111,6 +102,7 @@ const StockList: React.FC = () => {
             return true;
           });
         })}
+        filters={filters}
       />
     </div>
   );

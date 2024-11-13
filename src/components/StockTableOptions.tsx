@@ -1,7 +1,8 @@
 import { FaAnchor, FaFilter } from "react-icons/fa6";
 import { TickerFilter } from "./TickerFilter";
-
 import { ActionMeta, MultiValue } from "react-select";
+import { recommendedPortfolios } from "../util/utils";
+import CreatableSelect from "react-select/creatable";
 
 interface Option {
   value: string;
@@ -16,6 +17,7 @@ interface TickerFilterProps {
   ) => void;
   onShowFilter: () => void;
   onShowColumns: () => void;
+  onSelectPortfolio: (value: string) => void;
 }
 
 export const StockTableOptions: React.FC<TickerFilterProps> = ({
@@ -23,9 +25,24 @@ export const StockTableOptions: React.FC<TickerFilterProps> = ({
   onTicketFilterChange,
   onShowFilter,
   onShowColumns,
+  onSelectPortfolio,
 }) => {
   return (
     <div className="flex justify-end bg-slate-800 sm:rounded-lg">
+      <div className="p-3">
+        <CreatableSelect
+          options={recommendedPortfolios.map((portfolio) => ({
+            value: portfolio.name,
+            label: portfolio.name,
+          }))}
+          placeholder="Carteira recomendada"
+          onChange={(selectedOption) =>
+            onSelectPortfolio(selectedOption?.value || "")
+          }
+          className="w-64"
+          isClearable
+        />
+      </div>
       <div className="p-3 ">
         <TickerFilter options={options} onChange={onTicketFilterChange} />
       </div>
